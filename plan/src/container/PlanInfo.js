@@ -170,31 +170,51 @@ class PlanInfo extends PureComponent{
                         this.handleChange('desc',v)
                     }}
                 />
-                <Picker
-                    data={this.showUsers(this.props.user.get('userlist'))}
-                    value={this.state.touser}
-                    cols={1}
-                    onChange={v=>this.handleChange('tempuser',v)}
-                    onOk={this.handleChange('touser',this.state.tempuser)}
-                >
-                    <List.Item arrow="horizontal">派发员工</List.Item>
-                </Picker>
-                <Picker
-                    data={levels}
-                    value={this.state.level}
-                    cols={1}
-                    onChange={v=>this.handleChange('templevel',v)}
-                    onOk={this.handleChange('level',this.state.templevel)}
-                >
-                    <List.Item arrow="horizontal">日程等级 {this.mapLevel(this.state.level)}</List.Item>
-                </Picker>
-                <DatePicker
-                    value={parserDate(this.state.date)}
-                    onChange={tempdate => this.handleChange('tempdate',tempdate)}
-                    onOk={()=>this.handleChange('date',this.state.tempdate)}
-                    >
-                    <List.Item arrow="horizontal">规定完成时间</List.Item>
-                </DatePicker>
+                {
+                    this.props.plan.get('fromuser')===this.props.user.get('id')?(
+                        <Picker
+                            data={this.showUsers(this.props.user.get('userlist'))}
+                            value={this.state.touser}
+                            cols={1}
+                            onChange={v=>this.handleChange('tempuser',v)}
+                            onOk={this.handleChange('touser',this.state.tempuser)}
+                        >
+                            <List.Item arrow="horizontal">派发员工</List.Item>
+                        </Picker>
+                    ):(
+                        <InputItem
+                            style={{
+                                textAlign:"right"
+                            }}
+                            value={this.mapUserIdToName(this.props.plan.get('fromuser'))}
+                        >
+                            <div>派发领导</div>
+                        </InputItem>
+                    )
+                }
+
+                {
+                    this.props.plan.get('fromuser')===this.props.user.get('id')?(
+                        <Picker
+                            data={levels}
+                            value={this.state.level}
+                            cols={1}
+                            onChange={v=>this.handleChange('templevel',v)}
+                            onOk={this.handleChange('level',this.state.templevel)}
+                        >
+                            <List.Item arrow="horizontal">日程等级 {this.mapLevel(this.state.level)}</List.Item>
+                        </Picker>
+                    ):(
+                        <InputItem
+                            style={{
+                                textAlign:"right"
+                            }}
+                            value={this.state.date}
+                        >
+                            <div>规定完成时间</div>
+                        </InputItem>
+                    )
+                }
                 <InputItem
                     style={{
                         textAlign:"right"
