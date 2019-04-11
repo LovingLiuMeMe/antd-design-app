@@ -24,6 +24,14 @@ const Schemas = {
         signdate:{type:String,require:true},
         date:{type:String,require:true},
         state:{type:String,require:true,default:'L'}
+    },
+    chat:{
+        chatid:{type:String,require:true},
+        fromuser:{type:String,require:true},
+        touser:{type:String,require:true},
+        desc:{type:String,require:true},
+        uread:{type:Boolean,require:true,default:false},
+        signdate:{type:Date,require:true,default:Date.now}
     }
 }
 

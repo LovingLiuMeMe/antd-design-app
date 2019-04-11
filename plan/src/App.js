@@ -9,6 +9,7 @@ import Register from './container/Register';
 import DashBoard from './container/DashBoard';
 import PlanCreate from './container/PlanCreate';
 import PlanInfo from './container/PlanInfo';
+import Chat from './container/Chat';
 
 class App extends PureComponent {
   render() {
@@ -23,6 +24,7 @@ class App extends PureComponent {
                 <Route path='/register' exact component={Register}></Route>
                 <Route path='/plancreate' component={PlanCreate}></Route>
                 <Route path='/planinfo/:planid' component={PlanInfo}></Route>
+                <Route path='/chatuser/:userid' component={Chat}></Route>
                 <Route component={DashBoard}></Route>
               </Switch>
             </BrowserRouter>

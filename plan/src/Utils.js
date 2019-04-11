@@ -26,5 +26,17 @@ function parserDate(date) {
         return new Date();  
     }  
 };  
+function mapUserIdToAvator(id,userlist){
+    let avator = '';
+    userlist.toJS().map(v=>{
+        if(id===v._id){
+        avator = v.avator
+        }
+    })
+    return avator
+}
+function getChatId(fromid,toid){
+    return [fromid,toid].sort().join('_')
+}
 
-export {getFormatDate,parserDate}
+export {getFormatDate,parserDate,mapUserIdToAvator,getChatId}

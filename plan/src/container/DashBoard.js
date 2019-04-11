@@ -4,6 +4,7 @@ import PlanTabBar from '../component/PlanTabBar';
 import {Route} from 'react-router-dom'
 import PlanList from '../component/PlanList'
 import PlanCreate from './PlanCreate'
+import UserList from '../component/UserList'
 import {connect} from 'react-redux'
 
 const navList = [
@@ -38,9 +39,6 @@ const navList = [
 ]
 function MsgList(){
     return (<div>MsgList</div>)
-}
-function UserList(){
-    return (<div>UserList</div>)
 }
 function User(){
     return (<div>User</div>)

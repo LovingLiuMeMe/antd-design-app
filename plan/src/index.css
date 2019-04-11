@@ -42,3 +42,8 @@
 .selfCreate .am-card-header-extra{
     color: #fff;
 }
+.userlist .am-list-item img {
+    width: 45px;
+    height: 45px;
+    vertical-align: middle;
+}
