@@ -6,6 +6,7 @@ import PlanList from '../component/PlanList'
 import PlanCreate from './PlanCreate'
 import UserList from '../component/UserList'
 import {connect} from 'react-redux'
+import { getAllChatAction } from '../reducer/chat.reducer'
 
 const navList = [
     {
@@ -51,12 +52,14 @@ class DashBoard extends PureComponent{
     urlHandleChange(url){
         this.props.history.push(url)
     }
+    componentDidMount(){
+        this.props.getAllChat(this.props.user.get('id'))
+    }
     render(){
         return (
             <div>
             {
                     navList.map(v=>{
-                        
                         if(this.props.location.pathname === v.path)
                         {
                             return (
@@ -91,7 +94,15 @@ class DashBoard extends PureComponent{
 }
 const mapStateToProps = (state)=>{
     return {
-        user:state.get('user')
+        user:state.get('user'),
+        chat:state.get('chat')
     }
 }
-export default connect(mapStateToProps,null)(DashBoard)
+const mapDispatchToProps = (dispatch)=>{
+    return {
+        getAllChat:(userid)=>{
+            dispatch(getAllChatAction(userid))
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(DashBoard)

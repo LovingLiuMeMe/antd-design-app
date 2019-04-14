@@ -1,91 +1,121 @@
 import React,{PureComponent} from 'react';
 import { connect } from 'react-redux';
-import { msgListAction } from '../reducer/chat.reducer';
-import axios from 'axios';
+import { msgListByChatIdAction, listenRecvMsgAction, sendMsgAction, readChatsAction, getAllChatAction} from '../reducer/chat.reducer';
+import { NavBar, List, Icon, TextareaItem, WingBlank } from 'antd-mobile';
+import { mapIdToName, getChatId, mapIdToAvator } from '../Utils';
+import Record from '../component/Record';
+import QueueAnim from 'rc-queue-anim';
+import { toUnicode } from 'punycode';
 
+const Item = List.Item;
 class Chat extends PureComponent{
     constructor(props){
         super(props)
+        this.state={
+            value:''
+        }
+        this.handleChange = this.handleChange.bind(this)
+        this.submitRecord = this.submitRecord.bind(this)
+    }
+    submitRecord(){
+        const data = 
+            {   
+                from:this.props.user.get('id'),
+                to:this.props.match.params.userid,
+                chatid:getChatId(this.props.user.get('id'),this.props.match.params.userid),
+                content:this.state.value
+            }
+        console.log('data',data)
+        this.props.sendMsg(data)
+        this.setState({
+            value:''
+        })
+    }
+    handleChange(k,v){
+        this.setState({
+            [k]:v
+        })
     }
     componentDidMount(){
-        const userid = this.props.match.params.userid
-        this.props.msgList(userid)
+        this.props.msgListByChatId(getChatId(this.props.match.params.userid,this.props.user.get('id')))
+        this.props.listenRecvMsg(getChatId(this.props.match.params.userid,this.props.user.get('id')))
+    }
+    componentWillUnmount(){
+        this.props.readChats(getChatId(this.props.match.params.userid,this.props.user.get('id')),this.props.user.get('id'))
+        this.props.getAllChat(this.props.user.get('id'))
     }
     render(){
         return(
-            <div>ChatUser</div>
+            <div className='chat'>
+                <NavBar
+                    mode="dark"
+                    icon={<Icon type="left" />}
+                    onLeftClick={() => this.props.history.goBack()}
+                    className='header'
+                >
+                {
+                    mapIdToName(this.props.match.params.userid,this.props.user.get('userlist').toJS())
+                }
+                </NavBar>
+                <div className='wrap'>
+                    <div className='main'>
+                        {  
+                            this.props.chat.get('chatlist').toJS().map(v=>{
+                                return (
+                                    <WingBlank key={v._id} style={{overflow:'hidden'}}>
+                                        <Record 
+                                            data={v} 
+                                            login={this.props.user.get('id')} 
+                                            userlist={this.props.user.get('userlist').toJS()}
+                                            avatar={mapIdToAvator(v.from,this.props.user.get('userlist').toJS())}
+                                        />
+                                    </WingBlank>
+                                )
+                            }) 
+                        }
+                    </div>
+                </div>
+                
+                <List
+                    className='footer'
+                >
+                    <Item extra={<span onClick={()=>this.submitRecord()}>发送</span>} >
+                        <TextareaItem
+                            autoHeight
+                            labelNumber={5}
+                            value={this.state.value}
+                            onChange={(value)=>this.handleChange('value',value)}
+                        />
+                    </Item>
+                </List>
+            </div>
         )
     }
 
 }
-const mapDispatchToProps = (dispatch,getState)=>{
+const mapDispatchToProps = (dispatch)=>{
     return {
-        msgList:(userid)=>{
-            dispatch(msgListAction(userid))
+        msgListByChatId:(chatid)=>{
+            dispatch(msgListByChatIdAction(chatid))
+        },
+        listenRecvMsg:(chatid)=>{
+            dispatch(listenRecvMsgAction(chatid))
+        },
+        sendMsg:(data)=>{
+            dispatch(sendMsgAction(data))
+        },
+        readChats:(chatid,to)=>{
+            dispatch(readChatsAction(chatid,to))
+        },
+        getAllChat:(userid)=>{
+            dispatch(getAllChatAction(userid))
         }
     }
 }
-export default connect(null,mapDispatchToProps)(Chat);
- // import axios from 'axios'
-// import io from 'socket.io-client'
-// ​
-// const socket = io('ws://localhost:9093')// 页面一加载就建立连接
-// // 标识已读
-// const MSG_READ = 'MSG_READ'
-// const MSG_LIST = 'MSG_LIST'
-// const MSG_RECV = 'MSG_RECV'
-// const initState = { 
-//    chatmsg:[],
-//    unread:0,
-//    users:{}
-// }
-// export function chat(state=initState,action){
-//    switch(action.type){
-//        case MSG_LIST:
-//            return {...state,chatmsg:action.msgs,unread:action.msgs.filter(v=>!v.read&&v.to===action.filterid).length,users:action.users}
-//        case MSG_RECV:
-//            const unread = action.filterid===action.msg.to?state.unread+1:state.unread
-//            return {...state,chatmsg:[...state.chatmsg,action.msg],unread}
-//        // case MSG_RECV:
-//        // case MSG_READ:
-//        default:
-//        return state;
-//   }
-// }
-// function msgList(data,filterid){
-//    return {
-//        type: MSG_LIST,
-//        msgs:data.msgs,
-//        users:data.users,
-//        filterid
-//   }
-// }
-// function msgRecv(data,filterid){
-//    return {
-//        type: MSG_RECV,
-//        msg: data,
-//        filterid
-//   }
-// }
-// export function getMegList(){
-//    return (dispatch,getState)=>{
-//        axios.get('/user/getMsgList.json')
-//       .then(res=>{
-//            if(res.status===200&&res.data.code===0){
-//                dispatch(msgList(res.data,getState().user._id))
-//           }
-//       })
-//   }
-// }
-// export function recvMsg(){
-//    return (dispatch,getState)=>{
-//        socket.on('recvMsg',function(data){
-//            dispatch(msgRecv(data,getState().user._id))
-//       })
-//   }
-// }
-// export function sendMsg(from,to,msg){
-//    return dispatch=>{
-//        socket.emit('sendMsg',{from,to,msg})
-//   }
-// }
+const mapStateToProps = (state)=>{
+    return {
+        user: state.get('user'),
+        chat: state.get('chat')
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Chat);

@@ -47,3 +47,65 @@
     height: 45px;
     vertical-align: middle;
 }
+
+.chat .header{
+    width:100%;
+    z-index:3;
+    position:fixed;
+}
+.chat .footer{
+    width:100%;
+    z-index:3;
+    position:fixed;
+    bottom:0;
+}
+.chat .main {
+    height: 100%;
+    z-index: 1;
+    position: relative;
+    background: #fff;
+}
+.chat .wrap {
+    height: 100%;
+    padding-bottom: 68px;
+    padding-top: 55px;
+}
+.chat .record {
+    width: 100%;
+    clear: both;
+}
+.chat .right .container{
+    float: right;
+}
+.chat .left .container{
+    float: left;
+}
+.chat .record .avatar{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: red;
+}
+.chat .record .avatar img{
+    width: 100%;
+    height: auto;
+}
+.chat .right .content{
+    margin-right: 10px;
+    background: chartreuse;
+}
+.chat .left .content{
+    margin-left: 10px;
+    background: #9DD5FC;
+}
+.chat .record .content{
+    border-radius: 5px;
+    padding: 0 10px;
+    white-space:normal;
+    word-break:break-all;
+    word-wrap:break-word;
+    max-width: 200px;
+    line-height: 30px;
+    vertical-align: top;
+    display: inline-block;
+}

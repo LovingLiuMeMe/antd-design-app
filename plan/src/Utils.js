@@ -1,3 +1,5 @@
+import { user } from "./reducer/user.redux";
+
 function getFormatDate(time){
         var date = new Date(time);
         console.log(date)
@@ -26,17 +28,26 @@ function parserDate(date) {
         return new Date();  
     }  
 };  
-function mapUserIdToAvator(id,userlist){
-    let avator = '';
-    userlist.toJS().map(v=>{
-        if(id===v._id){
+function getChatId(from,to){
+    return [from,to].sort().join('_')
+}
+function mapIdToName(id,userlist){
+    let name = 'default';
+    console.log(userlist)
+    userlist.map(v=>{
+      if(id===v._id){
+        name = v.realname
+      }
+    })
+    return name
+  }
+function mapIdToAvator(id,userlist){
+    let avator = 'default';
+    userlist.map(v=>{
+      if(id===v._id){
         avator = v.avator
-        }
+      }
     })
     return avator
-}
-function getChatId(fromid,toid){
-    return [fromid,toid].sort().join('_')
-}
-
-export {getFormatDate,parserDate,mapUserIdToAvator,getChatId}
+  }
+export {getFormatDate,parserDate,getChatId,mapIdToName,mapIdToAvator}

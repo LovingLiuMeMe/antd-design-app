@@ -47,6 +47,7 @@
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
+    "rc-queue-anim": "^1.6.12",
     "rc-texty": "^0.2.0",
     "react": "^16.8.5",
     "react-app-polyfill": "^0.2.2",
@@ -60,6 +61,7 @@
     "redux-thunk": "^2.3.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
+    "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "style-loader": "0.23.1",
     "supervisor": "^0.12.0",
@@ -144,5 +146,5 @@
       ]
     ]
   },
-  "proxy": "http://localhost:9090"
+  "proxy": "http://127.0.0.1:9090"
 }

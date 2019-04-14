@@ -27,10 +27,10 @@ const Schemas = {
     },
     chat:{
         chatid:{type:String,require:true},
-        fromuser:{type:String,require:true},
-        touser:{type:String,require:true},
-        desc:{type:String,require:true},
-        uread:{type:Boolean,require:true,default:false},
+        from:{type:String,require:true},
+        to:{type:String,require:true},
+        content:{type:String,require:true},
+        unread:{type:Boolean,require:true,default:true},
         signdate:{type:Date,require:true,default:Date.now}
     }
 }

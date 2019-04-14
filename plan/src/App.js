@@ -24,7 +24,7 @@ class App extends PureComponent {
                 <Route path='/register' exact component={Register}></Route>
                 <Route path='/plancreate' component={PlanCreate}></Route>
                 <Route path='/planinfo/:planid' component={PlanInfo}></Route>
-                <Route path='/chatuser/:userid' component={Chat}></Route>
+                <Route path='/chat/:userid' component={Chat}></Route>
                 <Route component={DashBoard}></Route>
               </Switch>
             </BrowserRouter>
