@@ -1,12 +1,13 @@
 import React,{PureComponent} from 'react';
 import {NavBar, Icon} from 'antd-mobile';
 import PlanTabBar from '../component/PlanTabBar';
-import {Route} from 'react-router-dom'
-import PlanList from '../component/PlanList'
-import PlanCreate from './PlanCreate'
-import UserList from '../component/UserList'
-import {connect} from 'react-redux'
-import { getAllChatAction } from '../reducer/chat.reducer'
+import {Route} from 'react-router-dom';
+import PlanList from '../component/PlanList';
+import PlanCreate from './PlanCreate';
+import MsgList from '../component/MsgList'
+import UserList from '../component/UserList';
+import {connect} from 'react-redux';
+import { getAllChatAction } from '../reducer/chat.reducer';
 
 const navList = [
     {
@@ -38,9 +39,6 @@ const navList = [
         component:User
     }
 ]
-function MsgList(){
-    return (<div>MsgList</div>)
-}
 function User(){
     return (<div>User</div>)
 }
@@ -54,6 +52,7 @@ class DashBoard extends PureComponent{
     }
     componentDidMount(){
         this.props.getAllChat(this.props.user.get('id'))
+        this.props.chat.get('chatlist').toJS()
     }
     render(){
         return (

@@ -1,5 +1,3 @@
-import { user } from "./reducer/user.redux";
-
 function getFormatDate(time){
         var date = new Date(time);
         console.log(date)
@@ -33,7 +31,6 @@ function getChatId(from,to){
 }
 function mapIdToName(id,userlist){
     let name = 'default';
-    console.log(userlist)
     userlist.map(v=>{
       if(id===v._id){
         name = v.realname

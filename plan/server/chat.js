@@ -8,7 +8,6 @@ Router.get('/chatListByChatId.json',function(req,resp){
     const { chatid } = req.query
     Chat.find({chatid},function(err,doc){
         if(!err){
-            console.log('查询成功',doc)
             return resp.json(Util.renderJson(true,200,'查询成功',doc))
         }
         return resp.json(Util.renderJson(false,404,'查询失败'))
