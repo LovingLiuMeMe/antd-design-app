@@ -46,5 +46,26 @@ function mapIdToAvator(id,userlist){
       }
     })
     return avator
+}
+function mapIdToEmail(id,userlist){
+  let email = 'default';
+  userlist.map(v=>{
+    if(id===v._id){
+      email = v.email
+    }
+  })
+  return email
+}
+function mapLevelToName(level){
+  switch(level){
+    case 'H':
+      return '高';
+    case 'M':
+      return '中';
+    case 'L':
+      return '低';
+    default:
+      return '无';
   }
-export {getFormatDate,parserDate,getChatId,mapIdToName,mapIdToAvator}
+}
+export {getFormatDate,parserDate,getChatId,mapIdToName,mapIdToAvator,mapIdToEmail,mapLevelToName}

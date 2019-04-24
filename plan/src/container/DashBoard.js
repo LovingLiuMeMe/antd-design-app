@@ -6,8 +6,9 @@ import PlanList from '../component/PlanList';
 import PlanCreate from './PlanCreate';
 import MsgList from '../component/MsgList'
 import UserList from '../component/UserList';
+import User from '../component/User'
 import {connect} from 'react-redux';
-import { getAllChatAction } from '../reducer/chat.reducer';
+import { getAllChatAction, listenRecvMsgAction } from '../reducer/chat.reducer';
 
 const navList = [
     {
@@ -39,9 +40,6 @@ const navList = [
         component:User
     }
 ]
-function User(){
-    return (<div>User</div>)
-}
 class DashBoard extends PureComponent{
     constructor(props){
         super(props)
@@ -51,10 +49,18 @@ class DashBoard extends PureComponent{
         this.props.history.push(url)
     }
     componentDidMount(){
-        this.props.getAllChat(this.props.user.get('id'))
-        this.props.chat.get('chatlist').toJS()
+        this.props.getAllChat()
+        this.props.listenRecvMsg('dashboard')
     }
     render(){
+        const chatList = this.props.chat.get('chatlist').toJS()
+        const unreadMsgs = chatList.filter(v=>{
+            if(v.to===this.props.user.get('id')&&v.unread){
+                return true
+            }
+            return false
+        }).length
+        console.log('unreadMsgs',unreadMsgs)
         return (
             <div>
             {
@@ -83,6 +89,7 @@ class DashBoard extends PureComponent{
                     }) 
             }
                 <PlanTabBar
+                    unreadMsgs={unreadMsgs}
                     data={navList}
                     changeUrl={(url)=>this.urlHandleChange(url)}
                     nowPath={this.props.location.pathname}
@@ -99,8 +106,11 @@ const mapStateToProps = (state)=>{
 }
 const mapDispatchToProps = (dispatch)=>{
     return {
-        getAllChat:(userid)=>{
-            dispatch(getAllChatAction(userid))
+        getAllChat:()=>{
+            dispatch(getAllChatAction())
+        },
+        listenRecvMsg:(chatid)=>{
+            dispatch(listenRecvMsgAction(chatid))
         }
     }
 }

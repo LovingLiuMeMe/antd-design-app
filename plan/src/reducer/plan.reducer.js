@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable'
 import axios from 'axios'
+import {mapIdToEmail,mapIdToName,mapLevelToName} from '../Utils'
 
 const ERROR_MSG = 'ERROR_MSG'
 const CREATE_SUCCESS = 'CREATE_SUCCESS'
@@ -56,6 +57,7 @@ function CreateSuccess({_id,title,desc,fromuser,touser,level,date,signdate}){
     } 
 }
 function QrySuccess(payload){
+    console.log('QrySuccess',payload)
     return {
         type:QUERY_ONE_SUCCESS,
         payload:fromJS(payload)
@@ -106,10 +108,26 @@ export function createPlanAction(state){
             return ErrorMsg('请完善日程信息')
         }
     }
-    return dispatch =>{
+    return (dispatch,getState) =>{
         const {title,desc,fromuser,touser,level,date,signdate} = state
-
-        axios.post('/plan/planCreate.json',{title,desc,fromuser,touser,level,date,signdate}
+        const allState = getState().get('user').get('userlist').toJS()
+        const toemail = mapIdToEmail(touser,allState)
+        const fromname = mapIdToName(fromuser,allState)
+        const toname = mapIdToName(touser,allState)
+        const levelName = mapLevelToName(level)
+        const obj = {
+            title,
+            desc,
+            fromuser,
+            touser,
+            level,
+            date,
+            toemail,
+            fromname,
+            toname,
+            levelName
+        };
+        axios.post('/plan/planCreate.json',obj
         ).then(res=>{
             if(res.data.success&&res.data.code){
                 dispatch (CreateSuccess(res.data.data))
@@ -145,22 +163,32 @@ export function getPlanInfoAction(planid){
 export function updatePlanAction(data){
     return dispatch=>{
         axios.post('/plan/updatePlan.json',data).then(res=>{
-            if(res.data.success&&res.data.code===200){
-                dispatch(QrySuccess(res.data))
+            if(res.data.nModified&&res.data.nModified===0){
+                console.log('已经是最新信息，未发生更改。')
             }else{
-                dispatch(ErrorMsg(res.data.msg))
+                if(res.data.success&&res.data.code===200){
+                    dispatch(QrySuccess(res.data.data))
+                }else{
+                    dispatch(ErrorMsg(res.data.msg))
+                }
             }
+
         })
     }
 }
-export function setPlanStateAction(data){
+export function setPlanStatusAction(data){
     return dispatch=>{
-        axios.get('/plan/setPlanState.json',data).then(res=>{
+        axios.post('/plan/setPlanStatus.json',data).then(res=>{
             if(res.data.success&&res.data.code===200){
-                dispatch(QrySuccess(res.data.data))
+                if(res.data.data.nModified===0){
+                    console.log('已经是最新信息，未发生更改。')
+                }else{
+                    dispatch(QrySuccess(res.data.data))
+                }
             }else{
                 dispatch(ErrorMsg(res.data.msg))
             }
+
         })
     }
 }

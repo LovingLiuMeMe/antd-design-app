@@ -23,6 +23,7 @@ const Schemas = {
         level:{type:String,require:true},
         signdate:{type:String,require:true},
         date:{type:String,require:true},
+        status:{type:Number,require:true,default:0},
         state:{type:String,require:true,default:'L'}
     },
     chat:{

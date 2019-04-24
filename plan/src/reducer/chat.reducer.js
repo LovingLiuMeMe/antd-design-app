@@ -38,11 +38,16 @@ export function msgListByChatIdAction(chatid){
     }
 }
 export function listenRecvMsgAction(chatid){
-    return (dispatch)=>{
+    return (dispatch,getState)=>{
         socket.on('recvMsg',function(data){
-            if(JSON.parse(data).chatid===chatid){
-                dispatch(RecvMsg(data))
-            }     
+            const chat = JSON.parse(data)
+            if(chat.chatid===chatid){
+                dispatch(RecvMsg(chat))
+            }else if(chatid==='dashboard'){
+                if(chat.to===getState().get('user').get('id')){
+                    dispatch(RecvMsg(chat))
+                }
+            }    
         })
     }
 }
@@ -65,9 +70,9 @@ export function readChatsAction(chatid,to){
         })
     }
 }
-export function getAllChatAction(userid){
+export function getAllChatAction(){
     return dispatch =>{
-        axios.get('/chat/getAllChat.json?userid='+userid).then(res=>{
+        axios.get('/chat/getAllChat.json').then(res=>{
             if(res.data.success&&res.data.code===200){
                 dispatch(ChatList(res.data.data))
             }
@@ -81,8 +86,9 @@ function ChatList(payload){
     }
 }
 function RecvMsg(payload){
+    console.log('payload',payload)
     return {
         type:RECV_MSG,
-        payload:JSON.parse(payload)
+        payload
     }
 }

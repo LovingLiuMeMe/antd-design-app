@@ -3,13 +3,41 @@ const Router = exprss.Router()
 const model = require('./model')
 const PlanModel = model.getModel('plan')
 const Util = require('./util/serverUtil')
+const sendEmail = require('./util/sendEmail')
+
 
 Router.post('/planCreate.json',function(req,resp){
-    const { title,desc,touser,fromuser,level,date } = req.body
+    const {             
+        title,
+        desc,
+        fromuser,
+        touser,
+        level,
+        date,
+        toemail,
+        fromname,
+        toname,
+        levelName
+    } = req.body
     const signdate = Util.getNowDate();
     const plan = new PlanModel({title,desc,touser,fromuser,level,date,signdate });
     plan.save(function(err,doc){
         if(!err){
+            try {
+                // 发送邮件
+                const prop = {
+                    title,
+                    content:desc,
+                    author:fromname,
+                    deal:toname,
+                    to:toemail,
+                    level:levelName,
+                    signdate
+                }
+                sendEmail(prop)
+            } catch (error) {
+                console.log(error)
+            }
             return resp.json(Util.renderJson(true,200,'创建成功',doc))
         }
         return resp.json(Util.renderJson(false,400,'创建失败'))
@@ -47,9 +75,9 @@ Router.post('/updatePlan.json',function(req,resp){
         }
     })
 })
-Router.post('/setPlanState.json',function(req,resp){
-    const { id,state} = req.body
-    PlanModel.update({_id:id},{state},function(err,doc){
+Router.post('/setPlanStatus.json',function(req,resp){
+    const { id,status} = req.body
+    PlanModel.update({_id:id},{status},function(err,doc){
         if(!err){
             return resp.json(Util.renderJson(true,200,'更新成功',doc))
         }else{

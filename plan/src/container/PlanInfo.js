@@ -1,7 +1,7 @@
 import React,{PureComponent} from 'react'
 import { NavBar,Icon,List,InputItem,TextareaItem,Button,Picker,DatePicker } from 'antd-mobile'
 import { connect } from 'react-redux';
-import { getPlanInfoAction,updatePlanAction,setPlanStateAction } from '../reducer/plan.reducer'
+import { getPlanInfoAction,updatePlanAction,setPlanStatusAction } from '../reducer/plan.reducer'
 import {parserDate} from '../Utils'
 const colorStyle = {
     display: 'inline-block',
@@ -232,8 +232,8 @@ class PlanInfo extends PureComponent{
                     ):(
                         <Button 
                             type="primary" 
-                            onClick={()=>{this.props.setPlanState(this.state)}}
-                        >提交</Button>
+                            onClick={()=>{this.props.setPlanStatus(this.props.plan.get('status')===0||this.props.plan.get('status')===null?{id:this.state.id,status:1}:{id:this.state.id,status:2})}}
+                        >{this.props.plan.get('status')===0||this.props.plan.get('status')===null?'提交':'完成'}</Button>
                     )
 
                 }
@@ -256,8 +256,8 @@ const mapDispatchToProps = (dispatch) => {
         updatePlan: (data) =>{
             dispatch(updatePlanAction(data))
         },
-        setPlanState: (data) =>{
-            dispatch(setPlanStateAction(data))
+        setPlanStatus: (data) =>{
+            dispatch(setPlanStatusAction(data))
         }
     }
 }

@@ -23,9 +23,8 @@ Router.post('/readChats.json',function(req,resp){
     })
 })
 Router.get('/getAllChat.json',function(req,resp){
-    console.log('req',req)
-    const {userid} = req.query
-    Chat.find({'$or':[{from:userid},{to:userid}]},function(err,doc){
+    const {login_id} = req.cookies
+    Chat.find({'$or':[{from:login_id},{to:login_id}]},function(err,doc){
         console.log('doc',doc)
         if(!err){
             return resp.json(Util.renderJson(true,200,'查询成功',doc))

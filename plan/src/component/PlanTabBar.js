@@ -1,5 +1,5 @@
-import React from 'react'
-import {TabBar} from 'antd-mobile'
+import React from 'react';
+import {TabBar} from 'antd-mobile';
 
 const PlanTabBar = (props)=>{
     return (
@@ -29,7 +29,7 @@ const PlanTabBar = (props)=>{
                             }
                             }
                             selected={v.path === props.nowPath}
-                            badge={1}
+                            badge={v.path ==='/msglist'?props.unreadMsgs:null}
                             onPress={() => {
                                 props.changeUrl(v.path)
                             }}

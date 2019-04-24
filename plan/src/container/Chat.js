@@ -61,12 +61,12 @@ class Chat extends PureComponent{
                     <div className='main'>
                         {  
                             this.props.chat.get('chatlist').toJS().map(v=>{
+                                console.log('v',v)
                                 return (
                                     <WingBlank key={v._id} style={{overflow:'hidden'}}>
                                         <Record 
                                             data={v} 
                                             login={this.props.user.get('id')} 
-                                            userlist={this.props.user.get('userlist').toJS()}
                                             avatar={mapIdToAvator(v.from,this.props.user.get('userlist').toJS())}
                                         />
                                     </WingBlank>
