@@ -66,6 +66,7 @@ export function user(state=initState,action){
     }
 }
 const LoadDate = function(payload){
+    console.log('payload',payload)
     return {
         type: LOAD_DATA,
         payload:fromJS(payload)
@@ -178,4 +179,20 @@ export function qryAllUserListByCompanyIdAction(companyname){
         })
     }
    
+}
+export function saveUserInfoAction(state){
+    const {email,qq,pwd} = state
+    return dispatch=>{
+        axios.post('/user/saveUserInfo.json',{email,qq,pwd}).then(
+            res=>{
+                if(res.data.success&&res.data.code===200){
+                    const action = LoadDate(res.data.data)
+                    dispatch(action)
+                }else{
+                    console.log('更新失败')
+                }
+            }
+
+        )
+    }
 }
